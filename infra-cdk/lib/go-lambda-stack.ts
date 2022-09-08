@@ -1,11 +1,11 @@
-import * as cdk from '@aws-cdk/core';
-import * as path from "path";
-import * as lambda from '@aws-cdk/aws-lambda';
-import {LambdaRestApi} from "@aws-cdk/aws-apigateway";
+import * as path from 'path';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib';
+import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
+import { Construct } from 'constructs';
 
-
-export class GoLambdaStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+export class GoLambdaStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
     // Build the code and create the lambda
     const lambdaFunction = this.buildAndInstallGOLambda('backend-api', path.join(__dirname, '../../lambda/api'), 'main');
@@ -14,7 +14,7 @@ export class GoLambdaStack extends cdk.Stack {
     const apiGtw = this.createApiGatewayForLambda("backend-api-endpoint", lambdaFunction, 'Exposed endpoint for your GO lambda API')
 
     // Output the DNS of your API gateway deployment
-    new cdk.CfnOutput(this, 'lambda-url', { value: apiGtw.url! });
+    new CfnOutput(this, 'lambda-url', { value: apiGtw.url! });
   }
 
   /**
@@ -32,7 +32,7 @@ export class GoLambdaStack extends cdk.Stack {
     return new lambda.Function(this, id, {
       code: lambda.Code.fromAsset(lambdaPath, {
         bundling: {
-          image: lambda.Runtime.GO_1_X.bundlingDockerImage,
+          image: lambda.Runtime.GO_1_X.bundlingImage,
           user: "root",
           environment,
           command: [
@@ -54,7 +54,7 @@ export class GoLambdaStack extends cdk.Stack {
    * @param handler - Lambda function to call
    * @param description - Description of this endpoint
    */
-  createApiGatewayForLambda(id: string, handler: lambda.Function, description: string): LambdaRestApi{
+  createApiGatewayForLambda(id: string, handler: lambda.Function, description: string): LambdaRestApi {
     return new LambdaRestApi(this, id, {
       handler,
       description

@@ -1,8 +1,6 @@
-# cdk-golang-lambda-deployment
+# cdk-golang-newrelic-test
 
-This repo is an example on how to deploy a serverless API on AWS Lambda using aws CDK.
-
-Associated article https://faun.pub/golang-build-and-deploy-an-aws-lambda-using-cdk-b484fe99304b
+Model stack for testing New Relic monitoring; stack built on article https://faun.pub/golang-build-and-deploy-an-aws-lambda-using-cdk-b484fe99304b.
 
 ## Lambda
 The GO Lambda function is a simple API using `go-chi/chi` to handle http requests.  
